@@ -58,6 +58,19 @@ void precalc() {
 constexpr int inf = 1e15;
 constexpr int mod = 1e9 + 7;
 
+class ConvexHullTrick {
+    set<pii> s;
+    void add(const pii& v) {
+
+    }
+
+    pii calc(int x) {
+        auto it = s.upper_bound({x, inf});
+        --it;
+        return *it;
+    }
+};
+
 void solve() {
     int n, m;
     cin >> n >> m;
@@ -87,7 +100,7 @@ void solve() {
         int xx = 0;
         while (true) {
             int j = num.back();
-            xx = divide((a[j].second - a[i].second), (a[i].first - a[j].first));
+            xx = divide((a[i].second - a[j].second), (a[j].first - a[i].first));
             if (xx > x.back()) break;
             num.pop_back();
             x.pop_back();
@@ -97,16 +110,7 @@ void solve() {
     }
     int ans = 0;
     for (int v : q) {
-        int pos = 0, l = 0, r = x.size() - 1;
-        while (l <= r) {
-            int mid = (l + r) / 2;
-            if (v >= x[mid]) {
-                pos = mid;
-                l = mid + 1;
-            } else {
-                r = mid - 1;
-            }
-        }
+        int pos = upper_bound(all(x), v) - x.begin() - 1;
         int i = num[pos];
         int cur = (v * a[i].first % mod + a[i].second) % mod;
         ans = (ans + cur) % mod;
